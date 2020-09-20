@@ -253,6 +253,9 @@
       fetch(url, {
         method: 'POST', // or 'PUT'
         body: JSON.stringify(formData), // data can be `string` or {object}!
+        mode: 'cors',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'}
       }).then(res => res.json())
       .then(result => console.log('Success:', JSON.stringify(result)))
       .catch(error => console.error('Error:', error));
@@ -264,6 +267,9 @@
       fetch(url, {
         method: 'POST', // or 'PUT'
         body: JSON.stringify(formData), // data can be `string` or {object}!
+        mode: 'cors',
+        credentials: 'include',
+        headers: {'Content-Type': 'application/json'}
       }).then(res => res.json())
       .then(result => console.log('Success:', JSON.stringify(result)))
       .catch(error => console.error('Error:', error));
