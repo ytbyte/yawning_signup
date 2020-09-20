@@ -21,27 +21,6 @@
   <!-- Custom styles for this template -->
   <link href="css/landing-page.min.css" rel="stylesheet">
 
-  <!-- Email collection API -->
-  <script type=text/javascript src="{{url_for('static', filename='jQuery.js') }}"></script>
-  <script>
-    const myForm = document.getElementById('form_email');
-    const url = 'https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails';
-    myForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      fetch(url, {
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(formData), // data can be `string` or {object}!
-        headers:{
-          'Content-Type': 'application/json'
-        }
-      }).then(res => res.json())
-      .then(response => console.log('Success:', JSON.stringify(response)))
-      .catch(error => console.error('Error:', error));
-    });
-
-  </script>
-
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-178487021-1"></script>
   <script>
@@ -261,6 +240,27 @@
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Email collection API -->
+  <script>
+    const myForm = document.getElementById('form_email');
+    const url = 'https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails';
+    myForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      fetch(url, {
+        method: 'POST', // or 'PUT'
+        body: JSON.stringify(formData), // data can be `string` or {object}!
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+      .then(response => console.log('Success:', JSON.stringify(response)))
+      .catch(error => console.error('Error:', error));
+    });
+
+  </script>
+
 
 </body>
 
