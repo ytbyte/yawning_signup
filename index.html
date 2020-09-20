@@ -3,6 +3,29 @@
 
 <head>
 
+  <!-- Email collection API -->
+  <script type=text/javascript src="{{url_for('static', filename='jQuery.js') }}"></script>
+  <script>
+  function submit(){
+          var email = $('#SensorID').val();
+          $.ajax({
+                  type : 'POST',
+                  url : 'https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails',
+                  data : {
+                         SensorID:email
+                  },
+                  dataType : 'JSON',
+                  success : function(result){
+                          alert("result = "+ result);
+                  },
+                  error : function(xtr,status,error){
+                          alert(xtr +":"+status+":"+error);
+                  }
+          });
+  }
+  </script>
+
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -20,6 +43,16 @@
 
   <!-- Custom styles for this template -->
   <link href="css/landing-page.min.css" rel="stylesheet">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-178487021-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-178487021-1');
+  </script>
 
 </head>
 
@@ -47,10 +80,10 @@
           <form>
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-3">
-                <input type="email" class="form-control form-control-lg" placeholder="Enter your email...">
+                <input type="email" name="SensorID" id="SensorID" class="form-control form-control-lg" placeholder="Enter your email...">
               </div>
               <div class="col-12 col-md-3">
-                <button type="submit" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
+                <button type="submit" onclick="submit()" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
               </div>
             </div>
           </form>
@@ -168,10 +201,10 @@
           <form>
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-0">
-                <input type="email" class="form-control form-control-lg" placeholder="Enter your email address">
+                <input type="email" name="SensorID" id="SensorID" class="form-control form-control-lg" placeholder="Enter your email address">
               </div>
               <div class="col-12 col-md-3">
-                <button type="submit" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
+                <button type="submit" onclick="submit()" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
               </div>
             </div>
           </form>
