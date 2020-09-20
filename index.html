@@ -24,23 +24,22 @@
   <!-- Email collection API -->
   <script type=text/javascript src="{{url_for('static', filename='jQuery.js') }}"></script>
   <script>
-  function submit(){
-          var email_data = $('#email').val();
-          $.ajax({
-                  type : 'POST',
-                  url : 'https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails',
-                  data : {
-                         email : email_data
-                  },
-                  dataType : 'JSON',
-                  success : function(result){
-                          alert("result = "+ result);
-                  },
-                  error : function(xtr,status,error){
-                          alert(xtr +":"+status+":"+error);
-                  }
-          });
-  }
+    const myForm = document.getElementById('form_email');
+    const url = 'https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails';
+    myForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      fetch(url, {
+        method: 'POST', // or 'PUT'
+        body: JSON.stringify(formData), // data can be `string` or {object}!
+        headers:{
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+      .then(response => console.log('Success:', JSON.stringify(response)))
+      .catch(error => console.error('Error:', error));
+    });
+
   </script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -76,13 +75,13 @@
           <p class="lead mb-5">Sign up to get early-access to the smartest voice-controlled notification.</p>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <form>
+          <form class="form" id="form_email">
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-3">
-                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email...">
+                <input type="email" name="email" id="form_email" class="form-control form-control-lg" placeholder="Enter your email...">
               </div>
               <div class="col-12 col-md-3">
-                <button type="submit" onclick="submit()" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
+                <button type="submit" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
               </div>
             </div>
           </form>
@@ -197,13 +196,13 @@
           <h2 class="mb-4">Sign up for limited early-access when it's ready.<br>Don't miss our latest updates!</h2>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <form>
+          <form class="form" id="form_email">
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-0">
-                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email address">
+                <input type="email" name="email" id="form_email" class="form-control form-control-lg" placeholder="Enter your email address">
               </div>
               <div class="col-12 col-md-3">
-                <button type="submit" onclick="submit()" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
+                <button type="submit" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
               </div>
             </div>
           </form>
