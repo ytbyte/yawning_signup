@@ -21,6 +21,15 @@
   <!-- Custom styles for this template -->
   <link href="css/landing-page.min.css" rel="stylesheet">
 
+
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KM3Q52H');</script>
+  <!-- End Google Tag Manager -->
+
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-178487021-1"></script>
   <script>
@@ -31,9 +40,32 @@
     gtag('config', 'UA-178487021-1');
   </script>
 
+  <!-- Facebook Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '3365871460143161');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=3365871460143161&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Facebook Pixel Code -->
+
 </head>
 
 <body>
+
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KM3Q52H"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <!-- Navigation -->
   <!-- <nav class="navbar navbar-light bg-light static-top">
@@ -54,10 +86,10 @@
           <p class="lead mb-5">Sign up to get early-access to the smartest voice-controlled notification.</p>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <form class="form" id="form_header">
+          <form class="form" name="form_email">
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-3">
-                <input type="email" name="email" id="inp_email" class="form-control form-control-lg" placeholder="Enter your email...">
+                <input type="email" name="email" class="form-control form-control-lg" placeholder="Enter your email...">
               </div>
               <div class="col-12 col-md-3">
                 <button type="submit" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
@@ -175,10 +207,10 @@
           <h2 class="mb-4">Sign up for limited early-access when it's ready.<br>Don't miss our latest updates!</h2>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <form class="form" id="form_footer">
+          <form class="form" name="form_email">
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-0">
-                <input type="email" name="email" id="inp_email" class="form-control form-control-lg" placeholder="Enter your email address">
+                <input type="email" name="email" class="form-control form-control-lg" placeholder="Enter your email address">
               </div>
               <div class="col-12 col-md-3">
                 <button type="submit" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
@@ -243,37 +275,30 @@
 
   <!-- Email collection API -->
   <script>
-    const formHeader = document.getElementById('form_header');
-    const formFooter = document.getElementById('form_footer');
     const url = 'https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails';
 
-    formHeader.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      fetch(url, {
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(formData), // data can be `string` or {object}!
-        mode: 'no-cors',
-        credentials: 'include',
-        headers: {'Content-Type': 'application/json'}
-      }).then(res => res.json())
-      .then(result => console.log('Success:', JSON.stringify(result)))
-      .catch(error => console.error('Error:', error));
-    });
-
-    formFooter.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const formData = new FormData(this);
-      fetch(url, {
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(formData), // data can be `string` or {object}!
-        mode: 'no-cors',
-        credentials: 'include',
-        headers: {'Content-Type': 'application/json'}
-      }).then(res => res.json())
-      .then(result => console.log('Success:', JSON.stringify(result)))
-      .catch(error => console.error('Error:', error));
-    });
+    for (
+      let i=0;
+      i<document.getElementsByName('form_email').length;
+      i++
+    ) {
+      document.getElementsByName('form_email')[i].addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        fetch(url, {
+          method: 'POST', // or 'PUT'
+          body: JSON.stringify(formData), // data can be `string` or {object}!
+          mode: 'cors',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' // 'multipart/form-data'
+          }
+        }).then(response => response.json())
+        .then(result => console.log('Success:', JSON.stringify(result)))
+        .catch(error => console.error('Error:', error));
+      })
+    };
 
   </script>
 
