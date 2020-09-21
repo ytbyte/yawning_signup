@@ -86,10 +86,10 @@
           <p class="lead mb-5">Sign up to get early-access to the smartest voice-controlled notification.</p>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <form class="form" name="form_head" id="form_head">
+          <form class="form" action='https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails' name="form_head" id="form_head">
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-3">
-                <input type="email" name="email" class="form-control form-control-lg" placeholder="Enter your email...">
+                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email...">
               </div>
               <div class="col-12 col-md-3">
                 <button type="submit" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
@@ -207,10 +207,10 @@
           <h2 class="mb-4">Sign up for limited early-access when it's ready.<br>Don't miss our latest updates!</h2>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <form class="form" name="form_foot" id="form_foot">
+          <form class="form" action='https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails' name="form_foot" id="form_foot">
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-0">
-                <input type="email" name="email" class="form-control form-control-lg" placeholder="Enter your email address">
+                <input type="email" name="email" id="email" class="form-control form-control-lg" placeholder="Enter your email address">
               </div>
               <div class="col-12 col-md-3">
                 <button type="submit" class="btn btn-block btn-lg btn-primary">Sign Up!</button>
@@ -275,49 +275,80 @@
 
   <!-- Email collection API -->
   <script>
-    const url = 'https://cg4us22fx3.execute-api.us-east-1.amazonaws.com/dev/emails';
+    /**
+     * Helper function for POSTing data as JSON with fetch.
+     *
+     * @param {Object} options
+     * @param {string} options.url - URL to POST data to
+     * @param {FormData} options.formData - `FormData` instance
+     * @return {Object} - Response body from URL that was POSTed to
+     */
+    async function postFormDataAsJson({ url, formData }) {
+      const formDataJsonString = formData => {
+        if (!(formData instanceof FormData)) {
+          throw Error('formData argument is not a instance of FormData');
+        }
+        const data = {}
+        for (const [ name, value ] of formData) {
+          data[name] = value;
+        }
+        return JSON.stringify(data);
+      }
 
+      const fetchOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: formDataJsonString
+      };
+
+      const response = await fetch(url, fetchOptions);
+
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
+      }
+
+      return response.json();
+  }
+
+    /**
+     * Event handler for a form submit event.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event
+     *
+     * @param {SubmitEvent} event
+     */
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const form = e.currentTarget;
+      const url = form.action;
+
+      try {
+        const formData = new FormData(form);
+        formData.append('"source"','"yawning"');
+        // tried differently but didn't Works
+        // const formData = {
+        //   "email": `${form.name}`,
+        //   "source": "yawning"
+        // }
+        const responseData = await postFormDataAsJson({ url, formData });
+
+        console.log({ responseData });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    //  * Use for each form
     const formHead = document.getElementById('form_head');
+    formHead.addEventListener('submit', handleFormSubmit);
+
     const formFoot = document.getElementById('form_foot');
-    const formHeadSubmitted = formHead.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const dataHead = {
-        "email" : formHead.value,
-        "source" : "yawning"
-      }
-      fetch(url, {
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(dataHead), // data can be `string` or {object}!
-        mode: 'cors',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json' // 'multipart/form-data'
-        }
-      }).then(response => response.json())
-      .then(result => console.log('Success:', JSON.stringify(result)))
-      .catch(error => console.error('Error:', error));
-    });
-
-
-    const formFootSubmitted = formFoot.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const dataFoot = {
-        "email" : formFoot.value,
-        "source" : "yawning"
-      }
-      fetch(url, {
-        method: 'POST', // or 'PUT'
-        body: JSON.stringify(dataFoot), // data can be `string` or {object}!
-        mode: 'cors',
-        credentials: 'include',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json' // 'multipart/form-data'
-        }
-      }).then(response => response.json())
-      .then(result => console.log('Success:', JSON.stringify(result)))
-      .catch(error => console.error('Error:', error));
-    });
+    formFoot.addEventListener('submit', handleFormSubmit);
 
   </script>
 
